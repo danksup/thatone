@@ -38,7 +38,27 @@ def all():
     else:
         for i, j in enumerate(doller):
             print(f'{i + 1}.',j)
-    
+
+def startwith(x):
+    met_x = []
+    if not doller:
+        print('nothing to show')
+    else:
+        for i in doller:
+            if i.startswith(x):
+                met_x.append(i)
+        if not met_x:
+            print(f'no element starts with {x} ')
+        for number, item in enumerate(met_x):
+            print(f'{number + 1}.', item)
+
+def orderize():
+    confirmation = input('once executed, it will stay like that. confirm? ')
+    if confirmation == 'yes':
+        print('sorting....')
+        doller.sort()
+        print('successfully sorted the array')
+
 def remove(n):
     try:
         doller.pop(doller.index(n))
@@ -113,6 +133,8 @@ def timer():
     end_time=time.time()
     seconds = end_time - start_time
     print(f'took {int(seconds)}s to execute')
+
+
     
         
 while True:
@@ -128,8 +150,13 @@ while True:
     elif arg[0] == 'search':
         k = ' '.join(arg[1:]).strip()
         search(k)
-    elif menu == 'all':
-        all()
+    elif arg[0]== 'all':
+        try:
+            a = arg[1]
+            if a == 'startswith':
+                startwith(arg[2])
+        except:
+           all()
     elif menu.startswith('addtemp'):
         start_time = time.time()
         len_arr_old = len(doller)
@@ -148,6 +175,8 @@ while True:
             timer()
         except:
          print("Invalid input. Please provide a number.")
+    elif arg[0] == 'sort':
+        orderize()
     elif arg[0] == 'remove':
         try:
             if arg[1] == "all":
