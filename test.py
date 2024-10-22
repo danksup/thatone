@@ -144,7 +144,7 @@ while True:
             if added == int(n):
                 print('all data are unique')
             else:
-                print(f'from {n}, only {added} data were sucessfully added')
+                print(f'from {n}, only {added}({(added/int(n)*100)}%) data were sucessfully added')
             timer()
         except:
          print("Invalid input. Please provide a number.")
