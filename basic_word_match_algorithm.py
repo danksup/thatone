@@ -11,7 +11,7 @@ def simple_word_match_algorithm(word, target):
 
     if word == target:
         score += 100
-    elif len(word) is not len(target):
+    elif len(word) != len(target):
         score -= delta_len * 0.05
     else:
         score += 0.1
@@ -28,24 +28,21 @@ def suggest_word(word, word_dict):
             best_score = score
             best_match = i
 
-    if best_score >= 0.3:
-        return best_match, best_score
+    if best_score >= 0.2:
+        return best_match
     else:
-        return 'no word matches', best_score
+        return 'no word matches'
+
 
 def divider():
     print(f'{'-'*50}divider{'-'*50}')
 
 
-word_dict = ['apple', 'banana', 'orange', 'angel']
+# word_dict = ['add', 'all']
 
 
-print(suggest_word('ananaa', word_dict))
-divider()
-print(suggest_word('appel', word_dict))
-divider()
-print(suggest_word('range', word_dict))
-divider()
-print(suggest_word('angel', word_dict))
-divider()
-print(suggest_word('ange', word_dict))
+# print(suggest_word('alk', word_dict))
+# divider()
+# print(suggest_word('ald', word_dict))
+# divider()
+# print(suggest_word('adl', word_dict))
