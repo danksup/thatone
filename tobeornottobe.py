@@ -15,6 +15,7 @@ all_words = all_pos + all_neg
 
 intensfier = ['fucking', 'bloody', 'hella', 'insanely', 'really', 'exteremely', 'very', 'so']
 article = ['a', 'an', 'the']
+possesive = ['my', 'his', 'her', 'its', 'their', 'our', 'your']
 
 def IsEmpty(L):
     return L == []
@@ -57,7 +58,7 @@ def tone(sentence,ignore_intensifier=bool):
         k = (low.index(n) - 1)
         if k >= 0:
             
-            return low[k] in article
+            return low[k] in article or low[k] in possesive
 
     for i in low:
         if i in t1p:
@@ -138,7 +139,14 @@ def tone(sentence,ignore_intensifier=bool):
 
     return score
 
-def indicate(sentence, ignore_intensifier=bool):
+def indicate(sentence, ignore_intensifier=False):
+    """
+    
+    :param sentence: the sentence that you want the determine its sentiment score
+    :param ignore_intensifier: if true, intensifier wont be calculated. defaults at false
+    :return: score which is an integer
+
+    """
     score = tone(sentence, ignore_intensifier)
 
     if score > 0:

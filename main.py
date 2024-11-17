@@ -2,16 +2,45 @@ import random
 import time
 import os
 import cProfile
-from importlib import reload
+import traceback
+import importlib
+import sys
 
-#my own library
+#my own module
+import basic_word_match_algorithm
 from basic_word_match_algorithm import *
 from tobeornottobe import *
-
+import tobeornottobe
+import eval
+from eval import *
 
 doller = []
 
-valid_commands = ['add', 'lookup', 'search', 'all', 'sort', 'remove', 'pop', 'modify', 'addtemp', 'keluar', 'indicate', 'menu', 'reload','exit']
+valid_commands = ['add', 'lookup', 'search', 'all', 'sort', 'remove', 'pop', 'modify', 'addtemp','indicate', 'menu', 'reload','exit', 'math']
+
+def reload_script():
+    try:
+        print("Reloading the script...")
+        os.execl(sys.executable, sys.executable, *sys.argv)
+    except Exception as e:
+        print(f"Error while reloading: {e}")
+
+
+def reload_modules():
+    try:
+        print("Reloading modules...")
+        
+        # Reload the imported modules
+        importlib.reload(basic_word_match_algorithm)
+        importlib.reload(tobeornottobe)
+        importlib.reload(eval)
+
+        # If you have other modules you want to reload, add them here similarly.
+        
+        print("Modules reloaded successfully.")
+    except Exception as e: 
+        print(f"Error while reloading modules: {e}")
+
 
 def suggest_word(word, word_dict):
     best_score = 0
@@ -215,7 +244,7 @@ while True:
         elif arg[0] == 'all':
             try:
                 if arg[1] == 'startswith':
-                    startwith(arg[2])
+                    startwith(arg[2].upper())
                 else:
                     minint = int(arg[1])
                     maxint = int(arg[2])
@@ -223,7 +252,7 @@ while True:
             except IndexError:
                 all()
             except ValueError:
-                print("Please enter valid numbers for the range.")
+                print("invalid input.")
 
         elif menu.startswith('addtemp'):
             start_time = time.time()
@@ -264,24 +293,50 @@ while True:
         elif menu == 'exit':
             break;
         elif menu =='cprofile':
-            cProfile.run('add_temporary_data(1000000, 5)')
-        
+            confirm = input('are you sure you want to run this? this will heat up the device and take minutes (> 10mins): ')
+            if confirm == 'yes':
+                cProfile.run('add_temporary_data(1_000_000, 5)')
+            else:
+                continue
         elif arg[0] == 'indicate':
-            k = arg[1:]
-            print(k)
+            k = arg[1:-1]
+            j = arg[1:]
+            end = arg[-1:]
+            if end == 'false':
+                print(indicate(k,False))
+            else:
+                print(indicate(j))
             #print(indicate(k))
         elif menu == 'menu':
             print(', '.join(valid_commands))
-        elif menu == 'reload':
-           print('to be added')
+        elif arg[0] == 'reload':
+            try:
+                if arg[1] == 'module':
+                    reload_modules()
+                else:
+                    reload_script()
+            except:
+                 reload_script()
+        elif arg[0] == 'math':
+            k = arg[1:-1]
+            j = arg[1:]
+            end = arg[-1:]
+            try:
+                if end[0].lower() == 'true':
+                    print(eval(k, True))
+                elif end[0].lower() == 'false':
+                    print(eval(k, True))
+                else:
+                    print(eval(j))
+        
+            except ValueError:
+                print('only input valid expression')
+        elif menu == 'clear':
+            os.system('clear')
         else:
             suggested_command = suggest_word(arg[0], valid_commands)
             print(suggested_command)
-    except:
-        print('an error occuted')
-
-        
-
-
-
-
+    except Exception as e:
+        error_message = traceback.format_exc()  
+        print(f"An error occurred: {e}")
+        print(f"Error details:\n{error_message}")
